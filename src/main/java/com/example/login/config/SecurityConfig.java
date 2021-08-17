@@ -1,5 +1,6 @@
 package com.example.login.config;
 
+import com.example.login.filter.AdminRoleFilter;
 import com.example.login.filter.JwtAuthenticationFilter;
 import com.example.login.security.JwtAuthenticationProvider;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +28,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter filter = new JwtAuthenticationFilter("/**", this.authenticationManagerBean());
+        AdminRoleFilter adminRoleFilter = new AdminRoleFilter("/admin/**", this.authenticationManagerBean());
         http
             .csrf().disable()
             .authorizeRequests()
             .and()
             .addFilterBefore(filter, BasicAuthenticationFilter.class)
             .authenticationProvider(jwtAuthenticationProvider)
+            .addFilterAfter(adminRoleFilter, JwtAuthenticationFilter.class)
             .authorizeRequests()
             .anyRequest().authenticated()
             .and().httpBasic();

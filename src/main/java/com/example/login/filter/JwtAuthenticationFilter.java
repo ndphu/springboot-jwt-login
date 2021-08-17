@@ -1,6 +1,6 @@
 package com.example.login.filter;
 
-import com.example.login.exception.InvalidJwtAthenticationException;
+import com.example.login.exception.InvalidJwtAuthenticationException;
 import com.example.login.security.JwtAuthentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -26,11 +26,12 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         String authorization = request.getHeader("Authorization");
         if (StringUtils.hasText(authorization)) {
+            // TODO: check if user added Authorization header but value is not in format "Bearer <token>"
             String token = authorization.substring("Bearer ".length());
             Authentication jwtAuth = new JwtAuthentication(token);
             return getAuthenticationManager().authenticate(jwtAuth);
         } else {
-            throw new InvalidJwtAthenticationException("Missing authorization header");
+            throw new InvalidJwtAuthenticationException("Missing authorization header");
         }
     }
 
@@ -41,7 +42,7 @@ public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFil
             context.setAuthentication(authResult);
             chain.doFilter(request, response);
         } else {
-            throw new InvalidJwtAthenticationException("Fail to authenticate request");
+            throw new InvalidJwtAuthenticationException("Fail to authenticate request");
         }
     }
 }
