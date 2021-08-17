@@ -1,6 +1,6 @@
 package com.example.login.security;
 
-import com.example.login.exception.InvalidJwtAthenticationException;
+import com.example.login.model.UserInfo;
 import com.example.login.service.TokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +32,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         String token = (String) auth.getCredentials();
 
         // TODO: validate token here!!!
-        if (tokenService.isTokenValid(token)) {
-            auth.setAuthenticated(true);
-        }
+        UserInfo userInfo = tokenService.parseToken(token);
+        auth.setUserInfo(userInfo);
+        auth.setAuthenticated(true);
 
         return auth;
     }

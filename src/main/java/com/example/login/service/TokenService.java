@@ -1,5 +1,7 @@
 package com.example.login.service;
 
+import com.example.login.model.UserInfo;
+
 public interface TokenService {
-    boolean isTokenValid(String token);
+    UserInfo parseToken(String token);
 }

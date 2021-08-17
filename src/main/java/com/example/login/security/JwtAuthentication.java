@@ -1,5 +1,6 @@
 package com.example.login.security;
 
+import com.example.login.model.UserInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 
 public class JwtAuthentication implements Authentication {
     private final String token;
+    private UserInfo userInfo;
     private boolean authenticated;
 
     public JwtAuthentication(String token) {
@@ -27,7 +29,7 @@ public class JwtAuthentication implements Authentication {
 
     @Override
     public Object getDetails() {
-        return null;
+        return userInfo;
     }
 
     @Override
@@ -48,5 +50,9 @@ public class JwtAuthentication implements Authentication {
     @Override
     public String getName() {
         return null;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }
